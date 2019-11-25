@@ -32,7 +32,12 @@
       <div class="column is-3">
         <div class="control">
           <label class="label">Tempo de ligação em minutos:</label>
-          <input v-model="form.tempo" class="input" type="number" placeholder="ex: 30" />
+          <input
+            v-model="form.tempo"
+            class="input"
+            type="number"
+            placeholder="ex: 30"
+          />
           <p class="help is-danger" v-show="!form.tempo">obrigatório</p>
         </div>
       </div>
@@ -53,7 +58,13 @@
         </div>
       </div>
     </div>
-    <button class="button is-success" @click="$emit('send')" :disabled="!validateForm">Enviar</button>
+    <button
+      class="button is-success"
+      @click="$emit('send')"
+      :disabled="!validateForm"
+    >
+      Enviar
+    </button>
   </div>
 </template>
 <script>
@@ -79,5 +90,3 @@ export default {
   }
 };
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>;
-
