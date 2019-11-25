@@ -60,7 +60,22 @@ export default new Vuex.Store({
     opcoesPlanoFaleMais: state => state.opcoesPlanoFaleMais,
     tabelaPreDefinida: state => state.tabelaPreDefinida
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    clear(state) {
+      state.form = {
+        dddOrigem: "",
+        dddDestino: "",
+        tempo: "",
+        plano: "",
+        comFaleMais: "-",
+        semFaleMais: "-"
+      };
+    }
+  },
+  actions: {
+    clear({ commit }) {
+      commit("clear");
+    }
+  },
   modules: {}
 });

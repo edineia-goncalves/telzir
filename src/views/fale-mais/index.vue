@@ -24,17 +24,14 @@ export default {
     ...mapGetters(["tabelaPreDefinida", "form"])
   },
   methods: {
-    ...mapMutations(["formatCurrency"]),
+    ...mapMutations(["clear"]),
     formatCurrency(value) {
-      return (
-        value &&
-        value.toLocaleString("pt-BR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-          style: "currency",
-          currency: "BRL"
-        })
-      );
+      return value.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        style: "currency",
+        currency: "BRL"
+      });
     },
     send(form) {
       const tabelaPreDefinida = this.tabelaPreDefinida.find(
@@ -54,13 +51,16 @@ export default {
         }
       }
       this.setGrid.push({
-        dddOrigem: form.dddOrigem,
-        dddDestino: form.dddDestino,
-        tempo: form.tempo,
-        plano: form.plano.name,
-        semFaleMais: this.formatCurrency(form.semFaleMais),
+        dddOrigem: form.dddOrigem && form.dddOrigem,
+        dddDestino: form.dddDestino && form.dddDestino,
+        tempo: form.tempo && form.tempo,
+        plano: form.plano && form.plano.name,
+        semFaleMais: form.semFaleMais && this.formatCurrency(form.semFaleMais),
         comFaleMais: this.formatCurrency(form.comFaleMais)
       });
+      if (this.setGrid.length) {
+        this.clear();
+      }
     }
   }
 };
