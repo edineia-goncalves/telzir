@@ -55,8 +55,14 @@ export default {
         dddDestino: form.dddDestino && form.dddDestino,
         tempo: form.tempo && form.tempo,
         plano: form.plano && form.plano.name,
-        semFaleMais: form.semFaleMais && this.formatCurrency(form.semFaleMais),
-        comFaleMais: this.formatCurrency(form.comFaleMais)
+        semFaleMais:
+          form.semFaleMais === "-"
+            ? form.semFaleMais
+            : this.formatCurrency(form.semFaleMais),
+        comFaleMais:
+          form.comFaleMais === "-"
+            ? form.comFaleMais
+            : this.formatCurrency(form.comFaleMais)
       });
       if (this.setGrid.length) {
         this.clear();

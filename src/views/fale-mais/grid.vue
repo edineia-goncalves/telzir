@@ -1,6 +1,9 @@
 <template>
   <div class="is-margin-table">
-    <table class="table is-striped is-hoverable table is-fullwidth" v-if="data.length">
+    <table
+      class="table is-striped is-hoverable table is-fullwidth"
+      v-if="data.length"
+    >
       <thead>
         <tr>
           <th>Origem</th>
@@ -12,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in data" :key="`index${row}`">
+        <tr v-for="(row, index) in data" :key="`${index}-${row}`">
           <th>{{ row.dddOrigem }}</th>
           <th>{{ row.dddDestino }}</th>
           <th>{{ row.tempo }}</th>
