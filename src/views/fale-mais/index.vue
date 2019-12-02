@@ -1,7 +1,7 @@
 <template>
   <div class="has-background-white-ter box is-shadowless">
     <Form @send="send(form)" />
-    <grid :data="setGrid" />
+    <grid :data="dataGrid" />
   </div>
 </template>
 <script>
@@ -17,14 +17,14 @@ export default {
   },
   data() {
     return {
-      setGrid: []
+      dataGrid: []
     };
   },
   computed: {
-    ...mapGetters(["tabelaPreDefinida", "form"])
+    ...mapGetters(["tabelaPreDefinida", "form", "setGrid"])
   },
   methods: {
-    ...mapMutations(["clear"]),
+    ...mapMutations(["clear", "getForm"]),
     formatCurrency(value) {
       return new Intl.NumberFormat("pt-BR", {
         minimumFractionDigits: 2,
@@ -34,39 +34,18 @@ export default {
       }).format(value);
     },
     send(form) {
-      const tabelaPreDefinida = this.tabelaPreDefinida.find(
-        item =>
-          item.origem === form.dddOrigem && item.destino === form.dddDestino
-      );
-      if (tabelaPreDefinida) {
-        form.semFaleMais = tabelaPreDefinida.valorMinuto * form.tempo;
-        if (form.tempo <= form.plano.value) {
-          form.comFaleMais = 0;
-        } else {
-          const acrescimoExcedente =
-            Number(0.1 * tabelaPreDefinida.valorMinuto) +
-            Number(tabelaPreDefinida.valorMinuto);
-          const minutosExcedentes = form.tempo - form.plano.value;
-          form.comFaleMais = acrescimoExcedente * minutosExcedentes;
-        }
-      }
-      this.setGrid.push({
-        dddOrigem: form.dddOrigem && form.dddOrigem,
-        dddDestino: form.dddDestino && form.dddDestino,
-        tempo: form.tempo && form.tempo,
-        plano: form.plano && form.plano.name,
-        semFaleMais:
-          form.semFaleMais === "-"
-            ? form.semFaleMais
-            : this.formatCurrency(form.semFaleMais),
-        comFaleMais:
-          form.comFaleMais === "-"
-            ? form.comFaleMais
-            : this.formatCurrency(form.comFaleMais)
-      });
-      if (this.setGrid.length) {
-        this.clear();
-      }
+      form && this.getForm(form);
+      const setGrid = { ...this.setGrid };
+      setGrid.semFaleMais =
+        setGrid.semFaleMais === "-"
+          ? setGrid.semFaleMais
+          : this.formatCurrency(setGrid.semFaleMais);
+      setGrid.comFaleMais =
+        setGrid.comFaleMais === "-"
+          ? setGrid.comFaleMais
+          : this.formatCurrency(setGrid.comFaleMais);
+      this.dataGrid.push(setGrid);
+      this.clear();
     }
   }
 };

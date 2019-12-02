@@ -13,6 +13,14 @@ export default new Vuex.Store({
       comFaleMais: "-",
       semFaleMais: "-"
     },
+    setGrid: {
+      dddOrigem: "",
+      dddDestino: "",
+      tempo: "",
+      plano: "",
+      semFaleMais: "",
+      comFaleMais: ""
+    },
     opcoesDDDOrigem: ["011", "016", "017", "018"],
     opcoesDDDDestino: ["011", "016", "017", "018"],
     opcoesPlanoFaleMais: [
@@ -55,6 +63,7 @@ export default new Vuex.Store({
   },
   getters: {
     form: state => state.form,
+    setGrid: state => state.setGrid,
     opcoesDDDOrigem: state => state.opcoesDDDOrigem,
     opcoesDDDDestino: state => state.opcoesDDDDestino,
     opcoesPlanoFaleMais: state => state.opcoesPlanoFaleMais,
@@ -70,11 +79,42 @@ export default new Vuex.Store({
         comFaleMais: "-",
         semFaleMais: "-"
       };
+    },
+    getForm(state, value) {
+      const tabelaPreDefinida = state.tabelaPreDefinida.find(
+        item =>
+          item.origem === value.dddOrigem && item.destino === value.dddDestino
+      );
+
+      if (tabelaPreDefinida) {
+        value.semFaleMais = tabelaPreDefinida.valorMinuto * value.tempo;
+        if (value.tempo <= value.plano.value) {
+          value.comFaleMais = 0;
+        } else {
+          const acrescimoExcedente =
+            Number(0.1 * tabelaPreDefinida.valorMinuto) +
+            Number(tabelaPreDefinida.valorMinuto);
+          const minutosExcedentes = value.tempo - value.plano.value;
+          value.comFaleMais = acrescimoExcedente * minutosExcedentes;
+        }
+      }
+
+      state.setGrid = {
+        dddOrigem: value.dddOrigem && value.dddOrigem,
+        dddDestino: value.dddDestino && value.dddDestino,
+        tempo: value.tempo && value.tempo,
+        plano: value.plano && value.plano.name,
+        semFaleMais: value.semFaleMais && value.semFaleMais,
+        comFaleMais: value.comFaleMais && value.comFaleMais
+      };
     }
   },
   actions: {
     clear({ commit }) {
       commit("clear");
+    },
+    getForm({ commit }) {
+      commit("getForm");
     }
   },
   modules: {}
